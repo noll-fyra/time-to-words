@@ -36,11 +36,6 @@ describe("Time to words", () => {
     expect(timeInWords).toBe("sixteen to three");
   });
 
-  it("Handles times after 30 mins - 2:45", () => {
-    const timeInWords = convertTimeToWords("2:45");
-    expect(timeInWords).toBe("quarter to three");
-  });
-
   it("Handles times at 40 mins - 2:40", () => {
     const timeInWords = convertTimeToWords("2:40");
     expect(timeInWords).toBe("twenty to three");
@@ -51,9 +46,19 @@ describe("Time to words", () => {
     expect(timeInWords).toBe("seventeen to three");
   });
 
+  it("Handles times after 30 mins - 2:45", () => {
+    const timeInWords = convertTimeToWords("2:45");
+    expect(timeInWords).toBe("quarter to three");
+  });
+
   it("Handles times past 12 - 12:39", () => {
     const timeInWords = convertTimeToWords("12:39");
     expect(timeInWords).toBe("twenty one to one");
+  });
+
+  it("Handles times past 12 - 17:26", () => {
+    const timeInWords = convertTimeToWords("17:26");
+    expect(timeInWords).toBe("twenty six past five");
   });
 });
 

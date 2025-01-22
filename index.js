@@ -1,13 +1,13 @@
 // expecting time to be a string in the format like '8:15' or '12:30'
 function convertTimeToWords(time) {
   // split time into hour and minutes > [h,m]
-  function splitTime(time) {
-    return time.split(":");
+  function splitTime(timestring) {
+    return timestring.split(":");
   }
 
-  // convert hour from number to text
-  function convertTimeIntoText(time) {
-    switch (parseInt(time)) {
+  // convert time from number to text
+  function convertTimeIntoText(timestring) {
+    switch (parseInt(timestring, 10)) {
       case 1:
         return "one";
       case 2:
@@ -37,7 +37,7 @@ function convertTimeToWords(time) {
       case 14:
         return "fourteen";
       case 15:
-        return "fifteen";
+        return "quarter";
       case 16:
         return "sixteen";
       case 17:
@@ -66,12 +66,8 @@ function convertTimeToWords(time) {
         return "twenty eight";
       case 29:
         return "twenty nine";
-      // case 30:
-      //   return "thirty";
-      // case 40:
-      //   return "forty";
-      // case 50:
-      //   return "fifty";
+      case 30:
+        return "half";
       default:
         return "";
     }
@@ -88,27 +84,24 @@ function convertTimeToWords(time) {
     return "midday";
   }
 
+  // exact hour > [hour] o'clock
   if (minutes === "00") {
     return convertTimeIntoText(hour) + " o'clock";
   }
 
-  if (minutes === "15") {
-    return "quarter past " + convertTimeIntoText(hour);
+  // less than 30 minutes > [minutes] past [hour]
+  // special case for 15 minutes - use "quarter"
+  if (parseInt(minutes) <= 30) {
+    return (
+      convertTimeIntoText(minutes) +
+      " past " +
+      convertTimeIntoText(parseInt(hour) % 12)
+    );
   }
 
-  if (minutes === "30") {
-    return "half past " + convertTimeIntoText(hour);
-  }
-
-  if (minutes === "45") {
-    return "quarter to " + convertTimeIntoText((parseInt(hour) % 12) + 1);
-  }
-
-  if (parseInt(minutes) >= 0 && parseInt(minutes) <= 29) {
-    return convertTimeIntoText(minutes) + " past " + convertTimeIntoText(hour);
-  }
-
-  if (parseInt(minutes) >= 31 && parseInt(minutes) <= 59) {
+  // more than 30 minutes > [minutes] to [hour]
+  // special case for 45 minutes - use "quarter"
+  if (parseInt(minutes) >= 31) {
     return (
       convertTimeIntoText(60 - parseInt(minutes)) +
       " to " +
@@ -116,21 +109,8 @@ function convertTimeToWords(time) {
     );
   }
 
-  // if (time) return "half past eight";
+  // if all scenarios fail, return empty string
+  return "";
 }
-
-convertTimeToWords("8:14");
-
-// '0:00' > 'midnight'
-// '12:00' > 'midday'
-// '2:00' > 'two o'clock'
-// '2:03' > 'three past two'
-// '2:11' > 'eleven past two'
-// '2:15' > 'quarter past two'
-// '2:30' > 'half past two'
-// '2:33' > 'twenty seven to three'
-// '2:40' > 'twenty to three'
-// '2:45' > 'quarter to three'
-// '2:55' > 'five to three'
 
 module.exports = { convertTimeToWords };
